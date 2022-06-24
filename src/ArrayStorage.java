@@ -18,7 +18,7 @@ public class ArrayStorage {
             return;
         }
         Resume res = new Resume();
-        res.uuid = r.uuid.intern();
+        res.uuid = r.uuid;
         storage[size] = res;
         size++;
     }
@@ -27,7 +27,7 @@ public class ArrayStorage {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].toString())) {
                 Resume r = new Resume();
-                r.uuid = storage[i].uuid.intern();
+                r.uuid = storage[i].uuid;
                 return r;
             }
         }
