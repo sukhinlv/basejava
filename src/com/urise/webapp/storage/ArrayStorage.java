@@ -1,7 +1,6 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
-
 import java.util.Arrays;
 
 /**
@@ -17,15 +16,16 @@ public class ArrayStorage {
         size = 0;
     }
 
-    public boolean delete(String uuid) {
+    public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
-            return false;
+            System.out.printf("Can`t delete %s, resume not found", uuid);
+            return;
         }
         System.arraycopy(storage, index + 1, storage, index, size - index - 1);
         size--;
         storage[size] = null;
-        return true;
+        return;
     }
 
     public Resume get(String uuid) {
@@ -43,26 +43,30 @@ public class ArrayStorage {
         return Arrays.copyOf(storage, size);
     }
 
-    public boolean save(Resume r) {
+    public void save(Resume r) {
         if (size == STORAGE_CAPACITY) {
-            return false;
+            System.out.printf("Can`t save %s, max storage capacity reached", r.getUuid());
+            return;
+        }
+        if (findIndex(r.getUuid()) >= 0) {
+            System.out.printf("%s already in storage", r.getUuid());
+            return;
         }
         storage[size] = r;
         size++;
-        return true;
     }
 
     public int size() {
         return size;
     }
 
-    public boolean update(Resume resume) {
-        int index = findIndex(resume.uuid);
+    public void update(Resume resume) {
+        int index = findIndex(resume.getUuid());
         if (index < 0) {
-            return false;
+            System.out.printf("Can`t update resume. %s not found", resume.getUuid());
+            return;
         }
         storage[index] = resume;
-        return true;
     }
 
     private int findIndex(String uuid) {

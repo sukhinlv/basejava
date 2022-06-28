@@ -8,17 +8,17 @@ public class MainTestArrayStorage {
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
-        r1.uuid = "uuid1";
+        r1.setUuid("uuid1");
         Resume r2 = new Resume();
-        r2.uuid = "uuid2";
+        r2.setUuid("uuid2");
         Resume r3 = new Resume();
-        r3.uuid = "uuid3";
+        r3.setUuid("uuid3");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
 
-        System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.uuid));
+        System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
@@ -26,32 +26,30 @@ public class MainTestArrayStorage {
         System.out.print("\nTry to get \"John\": ");
         System.out.println(ARRAY_STORAGE.get("John") != null ? "John found" : "John not found");
         System.out.print("Try to get r2: ");
-        System.out.println(ARRAY_STORAGE.get(r2.uuid) != null ? "r2 found" : "r2 not found");
+        System.out.println(ARRAY_STORAGE.get(r2.getUuid()) != null ? "r2 found" : "r2 not found");
 
         Resume ur = new Resume();
-        ur.uuid = "Test resume";
-        System.out.print("\nTry to update " + ur.uuid);
-        System.out.println(ARRAY_STORAGE.update(ur) ? " - success" : " - failed");
-        System.out.print("Try to delete " + ur.uuid);
-        System.out.println(ARRAY_STORAGE.delete(ur.uuid) ? " - success" : " - failed");
-        ur.uuid = "uuid2";
-        System.out.print("Try to update " + ur.uuid);
-        System.out.println(ARRAY_STORAGE.update(ur) ? " - success" : " - failed");
+        ur.setUuid("Test resume");
+        System.out.println("\nTry to update " + ur.getUuid());
+        ARRAY_STORAGE.update(ur);
+        System.out.println("\nTry to delete " + ur.getUuid());
+        ARRAY_STORAGE.delete(ur.getUuid());
+        ur.setUuid("uuid2");
+        System.out.println("\nTry to update " + ur.getUuid());
+        ARRAY_STORAGE.update(ur);
 
         printAll();
-        System.out.println(ARRAY_STORAGE.delete(r1.uuid) ? "\nr1 successfully deleted" : "delete r1 failed");
+        ARRAY_STORAGE.delete(r1.getUuid());
         printAll();
         ARRAY_STORAGE.clear();
         printAll();
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
-        for (int i = 0; i <= ArrayStorage.STORAGE_CAPACITY; i++) {
+        for (int i = 1; i <= ArrayStorage.STORAGE_CAPACITY + 1; i++) {
             Resume r = new Resume();
-            r.uuid = String.valueOf(i).intern();
-            if (!ARRAY_STORAGE.save(r)) {
-                System.out.println("\nStorage overflow when trying to add element " + (i + 1));
-            }
+            r.setUuid(String.valueOf(i).intern());
+            ARRAY_STORAGE.save(r);
         }
     }
 
