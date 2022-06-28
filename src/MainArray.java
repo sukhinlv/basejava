@@ -1,3 +1,5 @@
+import com.urise.webapp.storage.ArrayStorage;
+import com.urise.webapp.model.Resume;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
