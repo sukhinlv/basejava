@@ -23,10 +23,11 @@ public class MainTestArrayStorage {
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
-        System.out.print("\nTry to get \"John\": ");
-        System.out.println(ARRAY_STORAGE.get("John") != null ? "John found" : "John not found");
         System.out.print("Try to get r2: ");
-        System.out.println(ARRAY_STORAGE.get(r2.getUuid()) != null ? "r2 found" : "r2 not found");
+        System.out.println(ARRAY_STORAGE.get(r2.getUuid()) != null ? "r2 found\n" : "r2 not found\n");
+
+        System.out.println("Try to save another uuid3");
+        ARRAY_STORAGE.save(r3);
 
         Resume ur = new Resume();
         ur.setUuid("Test resume");

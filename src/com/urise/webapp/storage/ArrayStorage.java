@@ -8,8 +8,8 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     public static final int STORAGE_CAPACITY = 10_000;
-    private Resume[] storage = new Resume[STORAGE_CAPACITY];
-    private int size;
+    private final Resume[] storage = new Resume[STORAGE_CAPACITY];
+    private int size = 0;
 
     public void clear() {
         Arrays.fill(storage, 0, size, null);
@@ -19,18 +19,21 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
-            System.out.printf("Can`t delete %s, resume not found", uuid);
+            System.out.printf("Can`t delete %s, resume not found\n", uuid);
             return;
         }
-        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
+//        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
         size--;
+        if (size > 0) {
+            storage[index] = storage[size];
+        }
         storage[size] = null;
-        return;
     }
 
     public Resume get(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
+            System.out.printf("Can`t get %s, resume not found\n", uuid);
             return null;
         }
         return storage[index];
@@ -45,15 +48,13 @@ public class ArrayStorage {
 
     public void save(Resume r) {
         if (size == STORAGE_CAPACITY) {
-            System.out.printf("Can`t save %s, max storage capacity reached", r.getUuid());
-            return;
+            System.out.printf("Can`t save %s, max storage capacity reached\n", r.getUuid());
+        } else if (findIndex(r.getUuid()) >= 0) {
+            System.out.printf("%s already in storage\n", r.getUuid());
+        } else {
+            storage[size] = r;
+            size++;
         }
-        if (findIndex(r.getUuid()) >= 0) {
-            System.out.printf("%s already in storage", r.getUuid());
-            return;
-        }
-        storage[size] = r;
-        size++;
     }
 
     public int size() {
@@ -63,7 +64,7 @@ public class ArrayStorage {
     public void update(Resume resume) {
         int index = findIndex(resume.getUuid());
         if (index < 0) {
-            System.out.printf("Can`t update resume. %s not found", resume.getUuid());
+            System.out.printf("Can`t update resume, %s not found\n", resume.getUuid());
             return;
         }
         storage[index] = resume;
