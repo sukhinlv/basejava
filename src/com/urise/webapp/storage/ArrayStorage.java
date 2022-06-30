@@ -23,11 +23,9 @@ public class ArrayStorage {
             return;
         }
 //        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
         size--;
-        if (size > 0) {
-            storage[index] = storage[size];
-        }
-        storage[size] = null;
     }
 
     public Resume get(String uuid) {
