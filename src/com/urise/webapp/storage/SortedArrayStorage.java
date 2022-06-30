@@ -24,24 +24,16 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     public void save(Resume r) {
         if (size == STORAGE_CAPACITY) {
             System.out.printf("Can`t save %s, max storage capacity reached\n", r.getUuid());
-        } else if (findIndex(r.getUuid()) >= 0) {
-            System.out.printf("%s already in storage\n", r.getUuid());
         } else {
-            /*
-            * найти позицию, значение в которой больше нового значения
-            * сдвинуть элементы начиная с этой позиции вправо
-            * записать на эту позицию новый элемент
-            */
-            int saveToIndex = 0;
-            for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid().compareTo(r.getUuid()) > 0){
-                    break;
-                }
-                saveToIndex++;
+            int saveToIndex = findIndex(r.getUuid());
+            if (saveToIndex >= 0) {
+                System.out.printf("%s already in storage\n", r.getUuid());
+            } else {
+                saveToIndex = -(saveToIndex) - 1;
+                System.arraycopy(storage, saveToIndex, storage, saveToIndex + 1, size - saveToIndex);
+                storage[saveToIndex] = r;
+                size++;
             }
-            System.arraycopy(storage, saveToIndex, storage, saveToIndex + 1, size - saveToIndex);
-            storage[saveToIndex] = r;
-            size++;
         }
     }
 
