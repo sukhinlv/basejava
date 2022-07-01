@@ -46,7 +46,44 @@ public abstract class AbstractArrayStorage implements Storage {
         storage[index] = resume;
     }
 
-    public abstract void delete(String uuid);
-    public abstract void save(Resume r);
+    public void delete(String uuid) {
+        int index = findIndex(uuid);
+        if (index < 0) {
+            System.out.printf("Can`t delete %s, resume not found\n", uuid);
+            return;
+        }
+        deleteResume(index);
+        storage[size - 1] = null;
+        size--;
+    }
+
+    public void save(Resume r) {
+        if (size == STORAGE_CAPACITY) {
+            System.out.printf("Can`t save %s, max storage capacity reached\n", r.getUuid());
+        } else {
+            int index = findIndex(r.getUuid());
+            if (index >= 0) {
+                System.out.printf("%s already in storage\n", r.getUuid());
+            } else {
+                index = -(index) - 1;
+                insertResume(index, r);
+                size++;
+            }
+        }
+    }
+
+    protected abstract void deleteResume(int index);
+
+    protected abstract void insertResume(int index, Resume r);
+
+    /**
+     * @return like Arrays.binarySearch, findIndex should returns index
+     *         of the resume with specified uuid, if it is contained in the array
+     *         otherwise, (-(insertion point)-1).  The insertion point
+     *         is defined as the point at which the new resume would be inserted
+     *         into the array.
+     *         Note that this guarantees that the return value will be >= 0 if
+     *         and only if the key is found.
+     */
     protected abstract int findIndex(String uuid);
 }
