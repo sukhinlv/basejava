@@ -14,7 +14,7 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void insertResume(int index, Resume r) {
-        storage[index] = r;
+        storage[size] = r;
     }
 
     protected int findIndex(String uuid) {
@@ -23,6 +23,6 @@ public class ArrayStorage extends AbstractArrayStorage {
                 return i;
             }
         }
-        return -(size + 1);
+        return -1;
     }
 }
