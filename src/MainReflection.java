@@ -9,6 +9,7 @@ public class MainReflection {
             IllegalAccessException {
         Resume r = new Resume("Look to me");
 
+        @SuppressWarnings("rawtypes")
         Class someClass = r.getClass();
         System.out.println(someClass);
         for (Method m : someClass.getDeclaredMethods()) {
@@ -23,6 +24,7 @@ public class MainReflection {
         System.out.println(field.get(r));
 
         field.set(r, "Cool");
+        @SuppressWarnings("unchecked")
         Method someMethod = someClass.getDeclaredMethod("toString");
         System.out.println(someMethod.invoke(r));
     }

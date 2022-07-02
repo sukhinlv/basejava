@@ -11,8 +11,11 @@ public class MainString {
         String s2 = "abc";
         String s3 = "ab";
         String s4 = "c";
+        //noinspection StringEquality
         System.out.println(s1 == s2);
+        //noinspection StringEquality
         System.out.println((s1 == (s3 + s4)));
+        //noinspection StringEquality
         System.out.println((s1 == (s3 + s4).intern()));
     }
 }
