@@ -1,5 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.FoundStorageException;
+import com.urise.webapp.exception.NotFoundStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -20,8 +23,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public final Resume get(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
-            System.out.printf("Can`t get %s, resume not found\n", uuid);
-            return null;
+            throw new NotFoundStorageException(uuid);
         }
         return storage[index];
     }
@@ -37,20 +39,18 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
-    public final void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
+    public final void update(Resume r) {
+        int index = findIndex(r.getUuid());
         if (index < 0) {
-            System.out.printf("Can`t update resume, %s not found\n", resume.getUuid());
-            return;
+            throw new NotFoundStorageException(r.getUuid());
         }
-        storage[index] = resume;
+        storage[index] = r;
     }
 
     public final void delete(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
-            System.out.printf("Can`t delete %s, resume not found\n", uuid);
-            return;
+            throw new NotFoundStorageException(uuid);
         }
         deleteResume(index);
         storage[--size] = null;
@@ -59,9 +59,9 @@ public abstract class AbstractArrayStorage implements Storage {
     public final void save(Resume r) {
         int index = findIndex(r.getUuid());
         if (size == STORAGE_CAPACITY) {
-            System.out.printf("Can`t save %s, max storage capacity reached\n", r.getUuid());
+            throw new StorageException("Storage is full!", r.getUuid());
         } else if (index >= 0) {
-            System.out.printf("%s already in storage\n", r.getUuid());
+            throw new FoundStorageException(r.getUuid());
         } else {
             insertResume(index, r);
             size++;
