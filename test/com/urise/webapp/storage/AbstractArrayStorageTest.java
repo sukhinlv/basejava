@@ -89,13 +89,4 @@ abstract class AbstractArrayStorageTest {
         }
         Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume(DUMMY)));
     }
-
-    @Test
-    abstract void deleteResume();
-
-    @Test
-    abstract void insertResume();
-
-    @Test
-    abstract void findIndex();
 }
