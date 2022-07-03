@@ -30,14 +30,16 @@ abstract class AbstractArrayStorageTest {
     @Test
     void clear() {
         storage.clear();
-        Assertions.assertEquals(storage.size(), 0);
-        Assertions.assertEquals(storage.getAll().length, 0);
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(storage.size(), 0),
+                () -> Assertions.assertEquals(storage.getAll().length, 0));
     }
 
     @Test
     void get() throws NotFoundStorageException {
-        Assertions.assertEquals(storage.get(UUID_1), new Resume(UUID_1));
-        Assertions.assertThrows(NotFoundStorageException.class, () -> storage.get(DUMMY));
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(storage.get(UUID_1), new Resume(UUID_1)),
+                () -> Assertions.assertThrows(NotFoundStorageException.class, () -> storage.get(DUMMY)));
     }
 
     @Test
@@ -52,23 +54,28 @@ abstract class AbstractArrayStorageTest {
 
     @Test
     void update() throws NotFoundStorageException {
-        storage.update(new Resume(UUID_2));
-        Assertions.assertEquals(storage.size(), 3);
-        Assertions.assertThrows(NotFoundStorageException.class, () -> storage.update(new Resume(DUMMY)));
+        Assertions.assertAll(
+                () -> storage.update(new Resume(UUID_2)),
+                () -> Assertions.assertEquals(storage.size(), 3),
+                () -> Assertions.assertThrows(NotFoundStorageException.class, () -> storage.update(new Resume(DUMMY))));
     }
 
     @Test
     void delete() throws NotFoundStorageException {
-        storage.delete(UUID_2);
-        Assertions.assertThrows(NotFoundStorageException.class, () -> storage.delete(DUMMY));
-        Assertions.assertEquals(storage.size(), 2);
+        Assertions.assertAll(
+                () -> storage.delete(UUID_2),
+                () -> Assertions.assertThrows(NotFoundStorageException.class, () -> storage.delete(DUMMY)),
+                () -> Assertions.assertEquals(storage.size(), 2));
     }
 
     @Test
     void save() throws FoundStorageException {
-        Assertions.assertThrows(FoundStorageException.class, () -> storage.save(new Resume(UUID_1)));
-        storage.save(new Resume(DUMMY));
-        Assertions.assertEquals(storage.size(), 4);
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(FoundStorageException.class, () -> storage.save(new Resume(UUID_1))),
+                () -> {
+                    storage.save(new Resume(DUMMY));
+                    Assertions.assertEquals(storage.size(), 4);
+                });
     }
 
     @Test
