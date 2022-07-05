@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.FoundStorageException;
-import com.urise.webapp.exception.NotFoundStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -10,7 +8,7 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     public static final int STORAGE_CAPACITY = 10_000;
     protected final Resume[] storage = new Resume[STORAGE_CAPACITY];
     protected int size = 0;
@@ -20,12 +18,26 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public final Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
-            throw new NotFoundStorageException(uuid);
+    @Override
+    public final Resume doGet(Object index) {
+        return storage[(Integer) index];
+    }
+
+    public final void doDelete(Object index) {
+        deleteResume((Integer) index);
+        storage[--size] = null;
+    }
+
+    public final void doSave(Resume r, Object index) {
+        if (size == STORAGE_CAPACITY) {
+            throw new StorageException("Storage is full!", r.getUuid());
         }
-        return storage[index];
+        insertResume(r, (Integer) index);
+        size++;
+    }
+
+    public final void doUpdate(Resume r, Object index) {
+        storage[(Integer) index] = r;
     }
 
     /**
@@ -39,38 +51,7 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
-    public final void update(Resume r) {
-        int index = findIndex(r.getUuid());
-        if (index < 0) {
-            throw new NotFoundStorageException(r.getUuid());
-        }
-        storage[index] = r;
-    }
-
-    public final void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
-            throw new NotFoundStorageException(uuid);
-        }
-        deleteResume(index);
-        storage[--size] = null;
-    }
-
-    public final void save(Resume r) {
-        int index = findIndex(r.getUuid());
-        if (size == STORAGE_CAPACITY) {
-            throw new StorageException("Storage is full!", r.getUuid());
-        } else if (index >= 0) {
-            throw new FoundStorageException(r.getUuid());
-        } else {
-            insertResume(index, r);
-            size++;
-        }
-    }
-
     protected abstract void deleteResume(int index);
 
-    protected abstract void insertResume(int index, Resume r);
-
-    protected abstract int findIndex(String uuid);
+    protected abstract void insertResume(Resume r, int index);
 }

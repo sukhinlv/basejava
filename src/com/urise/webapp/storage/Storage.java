@@ -19,5 +19,5 @@ public interface Storage {
 
     int size();
 
-    void update(Resume resume);
+    void update(Resume r);
 }

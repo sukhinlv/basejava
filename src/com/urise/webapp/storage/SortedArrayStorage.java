@@ -15,7 +15,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void insertResume(int index, Resume r) {
+    protected void insertResume(Resume r, int index) {
         if (index < 0) {
             index = -(index) - 1;
         }
@@ -32,10 +32,14 @@ public class SortedArrayStorage extends AbstractArrayStorage {
      *         Note that this guarantees that the return value will be >= 0 if
      *         and only if the key is found.
      */
-    @Override
-    protected int findIndex(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid);
         searchKey.setUuid(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey);
+    }
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return (Integer) searchKey >= 0;
     }
 }
