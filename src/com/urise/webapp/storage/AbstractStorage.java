@@ -44,10 +44,10 @@ public abstract class AbstractStorage implements Storage {
     }
 
     private Object findNotExistSearchKey(String uuid) {
-        Object key = getSearchKey(uuid);
-        if (isExist(key)) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
             throw new FoundStorageException(uuid);
         }
-        return key;
+        return searchKey;
     }
 }
