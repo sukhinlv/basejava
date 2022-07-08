@@ -7,17 +7,21 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AbstractStorageTest {
+public abstract class AbstractStorageTest {
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
+    protected static final String NAME_1 = "Иван Иваныч Иванов";
+    protected static final String NAME_2 = "Петр Петрович Петров";
+    protected static final String NAME_3 = "Сидор Сидорович Сидоров";
     protected static final String DUMMY = "Dummy";
-    protected static final Resume RESUME_1 = new Resume(UUID_1);
-    protected static final Resume RESUME_2 = new Resume(UUID_2);
-    protected static final Resume RESUME_3 = new Resume(UUID_3);
-    protected static final Resume RESUME_DUMMY = new Resume(DUMMY);
+    protected static final Resume RESUME_1 = new Resume(UUID_1, NAME_1);
+    protected static final Resume RESUME_2 = new Resume(UUID_2, NAME_2);
+    protected static final Resume RESUME_3 = new Resume(UUID_3, NAME_3);
+    protected static final Resume RESUME_DUMMY = new Resume(DUMMY, DUMMY);
     protected final AbstractStorage storage;
 
     public AbstractStorageTest(AbstractStorage storage) {
@@ -27,6 +31,7 @@ public class AbstractStorageTest {
     @BeforeEach
     void setUp() {
         storage.clear();
+        // порядок (1-3-2) сбит специально, не менять
         storage.save(RESUME_1);
         storage.save(RESUME_3);
         storage.save(RESUME_2);
@@ -56,18 +61,20 @@ public class AbstractStorageTest {
     }
 
     @Test
-    void getAll() {
-        Resume[] expected = {RESUME_1, RESUME_2, RESUME_3};
-        Resume[] actually = storage.getAll();
-        Arrays.sort(actually);
+    void getAllSorted() {
+        ArrayList<Resume> expected = new ArrayList<>();
+        expected.add(RESUME_1);
+        expected.add(RESUME_2);
+        expected.add(RESUME_3);
+        List<Resume> actually = storage.getAllSorted();
         Assertions.assertAll(
                 () -> assertSize(3),
-                () -> Assertions.assertArrayEquals(expected, actually));
+                () -> Assertions.assertEquals(expected, actually));
     }
 
     @Test
     void save() throws FoundStorageException {
-        Resume newResume = new Resume(DUMMY);
+        Resume newResume = new Resume(DUMMY, DUMMY);
         storage.save(newResume);
         Assertions.assertAll(
                 () -> assertSize(4),
@@ -82,12 +89,12 @@ public class AbstractStorageTest {
 
     @Test
     void update() throws NotFoundStorageException {
-        Resume newResume = new Resume(UUID_3);
+        Resume newResume = new Resume(UUID_3, NAME_3);
         storage.update(newResume);
         Assertions.assertAll(
                 () -> assertSize(3),
                 () -> Assertions.assertSame(newResume, storage.get(newResume.getUuid())),
-                () -> Assertions.assertThrows(NotFoundStorageException.class, () -> storage.update(new Resume(DUMMY))));
+                () -> Assertions.assertThrows(NotFoundStorageException.class, () -> storage.update(new Resume(DUMMY, DUMMY))));
     }
 
     void assertGet(Resume resume) {

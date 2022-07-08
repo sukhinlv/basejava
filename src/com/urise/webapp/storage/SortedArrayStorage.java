@@ -25,15 +25,16 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     /**
      * @return like Arrays.binarySearch, findIndex should return index
-     *         of the resume with specified uuid, if it is contained in the array
-     *         otherwise, (-(insertion point)-1).  The insertion point
-     *         is defined as the point at which the new resume would be inserted
-     *         into the array.
-     *         Note that this guarantees that the return value will be >= 0 if
-     *         and only if the key is found.
+     * of the resume with specified uuid, if it is contained in the array
+     * otherwise, (-(insertion point)-1).  The insertion point
+     * is defined as the point at which the new resume would be inserted
+     * into the array.
+     * Note that this guarantees that the return value will be >= 0 if
+     * and only if the key is found.
      */
     protected Integer getSearchKey(String uuid) {
-        return Arrays.binarySearch(storage, 0, size, new Resume(uuid));
+        // TODO почему он ищет??! fullName же пустышка, а должно быть имя
+        return Arrays.binarySearch(storage, 0, size, new Resume(uuid, ""));
     }
 
     @Override

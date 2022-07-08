@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 public class MainReflection {
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException,
             IllegalAccessException {
-        Resume r = new Resume("Look to me");
+        Resume r = new Resume("Look to me", "Look to me");
 
         @SuppressWarnings("rawtypes")
         Class someClass = r.getClass();

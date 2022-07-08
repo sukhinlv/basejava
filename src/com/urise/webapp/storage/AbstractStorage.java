@@ -4,7 +4,13 @@ import com.urise.webapp.exception.FoundStorageException;
 import com.urise.webapp.exception.NotFoundStorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.Comparator;
+
 public abstract class AbstractStorage implements Storage {
+
+    public static final Comparator<Resume> COMPARE_FULL_NAME =
+            Comparator.comparing(Resume::getFullName, String::compareTo)
+                    .thenComparing(Resume::getUuid, String::compareTo);
 
     public final Resume get(String uuid) {
         return doGet(findExistSearchKey(uuid));
@@ -31,7 +37,7 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void doUpdate(Resume r, Object searchKey);
 
     // возвращает индекс в массиве или еще какой другой индекс
-    protected abstract Object getSearchKey(String uuid);
+    protected abstract Object getSearchKey(String key);
 
     protected abstract boolean isExist(Object searchKey);
 
