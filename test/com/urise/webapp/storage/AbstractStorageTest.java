@@ -15,7 +15,9 @@ public abstract class AbstractStorageTest {
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
     protected static final String NAME_1 = "Иван Иваныч Иванов";
-    protected static final String NAME_2 = "Петр Петрович Петров";
+    // необходимо проверить что "если fullName разных людей совпадает, то сортируйте дополнительно по uuid"
+    protected static final String NAME_2 = "Иван Иваныч Иванов";
+//    protected static final String NAME_2 = "Петр Петрович Петров";
     protected static final String NAME_3 = "Сидор Сидорович Сидоров";
     protected static final String DUMMY = "Dummy";
     protected static final Resume RESUME_1 = new Resume(UUID_1, NAME_1);

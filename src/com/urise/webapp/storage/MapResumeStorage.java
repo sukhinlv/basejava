@@ -11,42 +11,32 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return storage.get((String) searchKey);
+        return storage.get(((Resume) searchKey).getUuid());
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        storage.remove((String) searchKey);
+        storage.remove(((Resume) searchKey).getUuid());
     }
 
     @Override
     protected void doSave(Resume r, Object searchKey) {
-        // TODO вот тут можно проигнорировать (??) searchKey и в качестве ключа использовать r.getUuid()
-        storage.put((String) searchKey, r);
+        storage.put(r.getUuid(), r);
     }
 
     @Override
     protected void doUpdate(Resume r, Object searchKey) {
-        storage.put((String) searchKey, r);
+        storage.put(r.getUuid(), r);
     }
 
     @Override
-    protected String getSearchKey(String uuid) {
-        /*
-            на входе получаем fullName
-            получить значения мапы getAllSorted
-            найти в ней через binarySearch нужный нам объект
-            return Arrays.binarySearch(storage, 0, size, new Resume(uuid, ""));
-            возвращаем
-                объект?
-                uuid объекта?
-        */
-        return uuid;
+    protected Resume getSearchKey(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return storage.containsKey((String) searchKey);
+        return searchKey != null;
     }
 
     @Override
@@ -56,7 +46,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     public List<Resume> getAllSorted() {
-        ArrayList<Resume> values = (ArrayList<Resume>) storage.values();
+        ArrayList<Resume> values = new ArrayList<>(storage.values());
         values.sort(COMPARE_FULL_NAME);
         return values;
     }

@@ -36,8 +36,8 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void doUpdate(Resume r, Object searchKey);
 
-    // возвращает индекс в массиве или еще какой другой индекс
-    protected abstract Object getSearchKey(String key);
+    // возвращает индекс в массиве или другой ключ
+    protected abstract Object getSearchKey(String uuid);
 
     protected abstract boolean isExist(Object searchKey);
 
