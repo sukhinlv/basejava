@@ -5,10 +5,11 @@ import com.urise.webapp.exception.NotFoundStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Comparator;
+import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
 
-    public static final Comparator<Resume> COMPARE_FULL_NAME =
+    public static final Comparator<Resume> RESUME_COMPARATOR =
             Comparator.comparing(Resume::getFullName, String::compareTo)
                     .thenComparing(Resume::getUuid, String::compareTo);
 
@@ -18,6 +19,15 @@ public abstract class AbstractStorage implements Storage {
 
     public final void delete(String uuid) {
         doDelete(findExistSearchKey(uuid));
+    }
+
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    public List<Resume> getAllSorted() {
+        var values = getStorageAsList();
+        values.sort(RESUME_COMPARATOR);
+        return values;
     }
 
     public final void save(Resume r) {
@@ -38,6 +48,8 @@ public abstract class AbstractStorage implements Storage {
 
     // возвращает индекс в массиве или другой ключ
     protected abstract Object getSearchKey(String uuid);
+
+    protected abstract List<Resume> getStorageAsList();
 
     protected abstract boolean isExist(Object searchKey);
 

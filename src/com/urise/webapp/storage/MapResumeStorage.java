@@ -35,6 +35,11 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
+    protected List<Resume> getStorageAsList() {
+        return new ArrayList<>(storage.values());
+    }
+
+    @Override
     protected boolean isExist(Object searchKey) {
         return searchKey != null;
     }
@@ -42,13 +47,6 @@ public class MapResumeStorage extends AbstractStorage {
     @Override
     public void clear() {
         storage.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        ArrayList<Resume> values = new ArrayList<>(storage.values());
-        values.sort(COMPARE_FULL_NAME);
-        return values;
     }
 
     @Override
