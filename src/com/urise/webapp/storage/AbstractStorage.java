@@ -7,7 +7,7 @@ import com.urise.webapp.model.Resume;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage<String, Resume> {
 
     public static final Comparator<Resume> RESUME_COMPARATOR =
             Comparator.comparing(Resume::getFullName, String::compareTo)
@@ -38,31 +38,31 @@ public abstract class AbstractStorage implements Storage {
         doUpdate(r, findExistSearchKey(r.getUuid()));
     }
 
-    protected abstract Resume doGet(Object searchKey);
+    protected abstract Resume doGet(SK searchKey);
 
-    protected abstract void doDelete(Object searchKey);
+    protected abstract void doDelete(SK searchKey);
 
-    protected abstract void doSave(Resume r, Object searchKey);
+    protected abstract void doSave(Resume r, SK searchKey);
 
-    protected abstract void doUpdate(Resume r, Object searchKey);
+    protected abstract void doUpdate(Resume r, SK searchKey);
 
     // возвращает индекс в массиве или другой ключ
-    protected abstract Object getSearchKey(String uuid);
+    protected abstract SK getSearchKey(String uuid);
 
     protected abstract List<Resume> getStorageAsList();
 
-    protected abstract boolean isExist(Object searchKey);
+    protected abstract boolean isExist(SK searchKey);
 
-    private Object findExistSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
+    private SK findExistSearchKey(String uuid) {
+        SK searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotFoundStorageException(uuid);
         }
         return searchKey;
     }
 
-    private Object findNotExistSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
+    private SK findNotExistSearchKey(String uuid) {
+        SK searchKey = getSearchKey(uuid);
         if (isExist(searchKey)) {
             throw new FoundStorageException(uuid);
         }

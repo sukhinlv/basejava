@@ -1,39 +1,59 @@
 package com.urise.webapp.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 
-/**
- * Initial resume class
- */
 public class Resume implements Comparable<Resume> {
 
     // Unique identifier
-    private String uuid;
+    private final String uuid;
+    private String fullName;
+    private final Map<ContactType, String> contacts = new HashMap<>();
+    private final Map<SectionType, AbstractSection> sections = new HashMap<>();
 
-    private final String fullName;
+    public Resume(String uuid, String fullName) {
+        this.uuid = requireNonNull(uuid, "Resume uuid must not be null");
+        setFullName(fullName);
+    }
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
     }
 
-    public Resume(String uuid, String fullName) {
-        this.uuid = requireNonNull(uuid, "Resume uuid must not be null");
-        this.fullName = requireNonNull(fullName, "Full name must not be null");
+    public Map<ContactType, String> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Map<ContactType, String> contacts) {
+        requireNonNull(contacts, "Contacts must not be null");
+        this.contacts.clear();
+        this.contacts.putAll(contacts);
     }
 
     public String getFullName() {
         return fullName;
     }
 
-    public String getUuid() {
-        return uuid;
+    public void setFullName(String fullName) {
+        this.fullName = requireNonNull(fullName, "Full name must not be null");
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public Map<SectionType, AbstractSection> getSections() {
+        return sections;
+    }
+
+    public void setSections(Map<SectionType, AbstractSection> sections) {
+        requireNonNull(sections, "Sections must not be null");
+        this.sections.clear();
+        this.sections.putAll(sections);
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public int compareTo(Resume o) {
@@ -45,12 +65,13 @@ public class Resume implements Comparable<Resume> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid) && Objects.equals(fullName, resume.fullName);
+        return Objects.equals(uuid, resume.uuid) && Objects.equals(fullName, resume.fullName) &&
+                Objects.equals(contacts, resume.contacts) && Objects.equals(sections, resume.sections);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName);
+        return Objects.hash(uuid, fullName, contacts, sections);
     }
 
     @Override
@@ -58,6 +79,8 @@ public class Resume implements Comparable<Resume> {
         return "Resume{" +
                 "uuid='" + uuid + '\'' +
                 ", fullName='" + fullName + '\'' +
+                ", contacts=" + contacts +
+                ", sections=" + sections +
                 '}';
     }
 }

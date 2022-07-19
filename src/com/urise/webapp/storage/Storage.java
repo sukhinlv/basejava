@@ -7,19 +7,19 @@ import java.util.List;
 /**
  * Array based storage for Resumes
  */
-public interface Storage {
+public interface Storage<KT, DT> {
 
     void clear();
 
-    void delete(String uuid);
+    void delete(KT uuid);
 
-    Resume get(String uuid);
+    Resume get(KT uuid);
 
-    List<Resume> getAllSorted();
+    List<DT> getAllSorted();
 
-    void save(Resume r);
+    void save(DT r);
 
     int size();
 
-    void update(Resume r);
+    void update(DT r);
 }
