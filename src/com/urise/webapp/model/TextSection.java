@@ -8,7 +8,7 @@ public class TextSection extends AbstractSection {
     private String data;
 
     public TextSection(String data) {
-        setData(data);
+        this.data = requireNonNull(data, "Text section data must not be null");
     }
 
     public String getData() {

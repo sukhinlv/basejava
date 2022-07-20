@@ -6,10 +6,10 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 public class ListSection extends AbstractSection {
-    private ArrayList<String> data = new ArrayList<>();
+    private ArrayList<String> data;
 
     public ListSection(ArrayList<String> data) {
-        setData(data);
+        this.data = requireNonNull(data, "List section data must not be null");
     }
 
     public ArrayList<String> getData() {

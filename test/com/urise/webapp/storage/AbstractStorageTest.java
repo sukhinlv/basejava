@@ -20,10 +20,10 @@ public abstract class AbstractStorageTest {
 //    protected static final String NAME_2 = "Петр Петрович Петров";
     protected static final String NAME_3 = "Сидор Сидорович Сидоров";
     protected static final String DUMMY = "Dummy";
-    protected static final Resume RESUME_1 = new Resume(UUID_1, NAME_1);
-    protected static final Resume RESUME_2 = new Resume(UUID_2, NAME_2);
-    protected static final Resume RESUME_3 = new Resume(UUID_3, NAME_3);
-    protected static final Resume RESUME_DUMMY = new Resume(DUMMY, DUMMY);
+    protected static final Resume RESUME_1 = ResumeTestData.createTestResume(UUID_1, NAME_1);
+    protected static final Resume RESUME_2 =ResumeTestData.createTestResume(UUID_2, NAME_2);
+    protected static final Resume RESUME_3 =ResumeTestData.createTestResume(UUID_3, NAME_3);
+    protected static final Resume RESUME_DUMMY =ResumeTestData.createTestResume(DUMMY, DUMMY);
     protected final AbstractStorage storage;
 
     public AbstractStorageTest(AbstractStorage storage) {
@@ -76,7 +76,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     void save() throws FoundStorageException {
-        Resume newResume = new Resume(DUMMY, DUMMY);
+        Resume newResume =ResumeTestData.createTestResume(DUMMY, DUMMY);
         storage.save(newResume);
         Assertions.assertAll(
                 () -> assertSize(4),
@@ -91,12 +91,12 @@ public abstract class AbstractStorageTest {
 
     @Test
     void update() throws NotFoundStorageException {
-        Resume newResume = new Resume(UUID_3, NAME_3);
+        Resume newResume =ResumeTestData.createTestResume(UUID_3, NAME_3);
         storage.update(newResume);
         Assertions.assertAll(
                 () -> assertSize(3),
                 () -> Assertions.assertSame(newResume, storage.get(newResume.getUuid())),
-                () -> Assertions.assertThrows(NotFoundStorageException.class, () -> storage.update(new Resume(DUMMY, DUMMY))));
+                () -> Assertions.assertThrows(NotFoundStorageException.class, () -> storage.update(ResumeTestData.createTestResume(DUMMY, DUMMY))));
     }
 
     void assertGet(Resume resume) {

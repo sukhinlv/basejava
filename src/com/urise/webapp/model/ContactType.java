@@ -1,15 +1,15 @@
 package com.urise.webapp.model;
 
 public enum ContactType {
-    PHONE("Тел."),
-    CELLPHONE("Сот.тел."),
-    HOMEPHONE("Дом.тел."),
+    PHONE("РўРµР»."),
+    CELLPHONE("РЎРѕС‚.С‚РµР»."),
+    HOMEPHONE("Р”РѕРј.С‚РµР»."),
     SKYPE("Skype"),
-    MAIL("Почта"),
-    LINKEDIN("Профиль LinkedIn"),
-    GITHUB("Профиль Github"),
-    STACKOVERFLOW("Профиль Stackoverflow"),
-    HOMEPAGE("Домашняя страница");
+    MAIL("РџРѕС‡С‚Р°"),
+    LINKEDIN("РџСЂРѕС„РёР»СЊ LinkedIn"),
+    GITHUB("РџСЂРѕС„РёР»СЊ Github"),
+    STACKOVERFLOW("РџСЂРѕС„РёР»СЊ Stackoverflow"),
+    HOMEPAGE("Р”РѕРјР°С€РЅСЏСЏ СЃС‚СЂР°РЅРёС†Р°");
 
     private final String title;
 

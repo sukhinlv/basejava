@@ -1,22 +1,22 @@
 package com.urise.webapp.model;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
 public class OrganizationSection extends AbstractSection {
-    private ArrayList<Organization> data = new ArrayList<>();
+    private HashSet<Organization> data;
 
-    public OrganizationSection(ArrayList<Organization> data) {
-        setData(data);
+    public OrganizationSection(HashSet<Organization> data) {
+        this.data = requireNonNull(data, "Organization section data must not be null");
     }
 
-    public ArrayList<Organization> getData() {
+    public HashSet<Organization> getData() {
         return data;
     }
 
-    public void setData(ArrayList<Organization> data) {
+    public void setData(HashSet<Organization> data) {
         this.data = requireNonNull(data, "Organization section data must not be null");
     }
 

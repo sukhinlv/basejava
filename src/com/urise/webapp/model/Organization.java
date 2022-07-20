@@ -7,21 +7,21 @@ import static java.util.Objects.requireNonNull;
 
 public class Organization {
     private String title;
-    private String link;
+    private String website;
     private ArrayList<Period> periods;
 
-    public Organization(String title, String link, ArrayList<Period> periods) {
-        setTitle(title);
-        setLink(link);
-        setPeriods(periods);
+    public Organization(String title, String website, ArrayList<Period> periods) {
+        this.title = requireNonNull(title, "Organization title  must not be null");
+        this.website = requireNonNull(website, "Website must not be null");
+        this.periods = requireNonNull(periods, "Periods must not be null");
     }
 
-    public String getLink() {
-        return link;
+    public String getWebsite() {
+        return website;
     }
 
-    public void setLink(String link) {
-        this.link = requireNonNull(link, "Link must not be null");
+    public void setWebsite(String website) {
+        this.website = requireNonNull(website, "Website must not be null");
     }
 
     public ArrayList<Period> getPeriods() {
@@ -45,19 +45,19 @@ public class Organization {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return Objects.equals(title, that.title) && Objects.equals(link, that.link) && Objects.equals(periods, that.periods);
+        return Objects.equals(title, that.title) && Objects.equals(website, that.website);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, link, periods);
+        return Objects.hash(title, website);
     }
 
     @Override
     public String toString() {
         return "Organization{" +
                 "title='" + title + '\'' +
-                ", link='" + link + '\'' +
+                ", link='" + website + '\'' +
                 ", periods=" + periods +
                 '}';
     }

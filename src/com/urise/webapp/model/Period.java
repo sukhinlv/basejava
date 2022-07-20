@@ -12,10 +12,10 @@ public class Period {
     private LocalDate endDate;
 
     public Period(String title, String desc, LocalDate startDate, LocalDate endDate) {
-        setTitle(title);
-        setDesc(desc);
-        setStartDate(startDate);
-        setEndDate(endDate);
+        this.title = requireNonNull(title, "Title must not be null");
+        this.desc = desc;
+        this.startDate = requireNonNull(startDate, "Start date must not be null");
+        this.endDate = endDate;
     }
 
     public String getDesc() {
