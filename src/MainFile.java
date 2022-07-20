@@ -1,5 +1,4 @@
 import java.io.File;
-import java.util.Locale;
 import java.util.Objects;
 
 public class MainFile {
@@ -16,11 +15,12 @@ public class MainFile {
         }
         var list = directory.listFiles();
         if (list == null) {
+            System.out.println("Directory " + dirName + " is empty");
             return;
         }
         for (var file : list) {
             if (file.isDirectory()) {
-                System.out.println(getTabs(dirLevel) + file.getName().toUpperCase(Locale.ROOT));
+                System.out.println(getTabs(dirLevel) + file.getName().toUpperCase());
                 printTabbedFileNames(file.getAbsolutePath(), dirLevel + 1);
             } else {
                 System.out.println(getTabs(dirLevel) + file.getName());
