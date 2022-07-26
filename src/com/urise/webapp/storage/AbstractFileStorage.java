@@ -25,7 +25,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected Resume doGet(File file) {
-        return doRead(file);
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
     }
 
     @Override
@@ -48,7 +52,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doUpdate(Resume r, File file) {
-        doWrite(r, file);
+        try {
+            doWrite(r, file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
     }
 
     @Override
@@ -62,8 +70,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         var fileList = directory.listFiles(File::isFile);
         if (fileList != null) {
             for (var file : fileList) {
-                result.add(doRead(file));
+                try {
+                    result.add(doRead(file));
+                } catch (IOException e) {
+                    throw new StorageException("IO error", file.getName(), e);
+                }
             }
+        } else {
+            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs.", "");
         }
         return result;
     }
@@ -82,6 +96,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
                     throw new StorageException("Can not delete file", file.getName());
                 }
             }
+        } else {
+            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs.", "");
         }
     }
 
@@ -89,12 +105,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     public int size() {
         var files = directory.listFiles(File::isFile);
         if (files == null) {
-            return 0;
+            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs.", "");
         } else {
             return files.length;
         }
     }
 
-    protected abstract Resume doRead(File file);
-    protected abstract void doWrite(Resume r, File file);
+    protected abstract Resume doRead(File file) throws IOException;
+
+    protected abstract void doWrite(Resume r, File file) throws IOException;
 }
