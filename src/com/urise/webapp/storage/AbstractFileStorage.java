@@ -68,16 +68,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected List<Resume> getStorageAsList() {
         var result = new ArrayList<Resume>();
         var fileList = directory.listFiles(File::isFile);
-        if (fileList != null) {
-            for (var file : fileList) {
-                try {
-                    result.add(doRead(file));
-                } catch (IOException e) {
-                    throw new StorageException("IO error", file.getName(), e);
-                }
-            }
-        } else {
-            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs.", "");
+        if (fileList == null) {
+            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs", "");
+        }
+        for (var file : fileList) {
+            doGet(file);
         }
         return result;
     }
@@ -90,14 +85,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     public void clear() {
         var fileList = directory.listFiles(File::isFile);
-        if (fileList != null) {
-            for (var file : fileList) {
-                if (!file.delete()) {
-                    throw new StorageException("Can not delete file", file.getName());
-                }
+        if (fileList == null) {
+            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs", "");
+        }
+        for (var file : fileList) {
+            if (!file.delete()) {
+                throw new StorageException("Can not delete file", file.getName());
             }
-        } else {
-            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs.", "");
         }
     }
 
@@ -105,7 +99,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     public int size() {
         var files = directory.listFiles(File::isFile);
         if (files == null) {
-            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs.", "");
+            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs", "");
         } else {
             return files.length;
         }
