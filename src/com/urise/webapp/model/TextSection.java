@@ -1,10 +1,13 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
 public class TextSection extends AbstractSection {
+    @Serial
+    private static final long serialVersionUID = 8255478991150510731L;
     private String data;
 
     public TextSection(String data) {

@@ -7,10 +7,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = new File("Storage");
+    protected static final Path STORAGE_PATH = Paths.get("Storage");
+
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
@@ -95,7 +101,7 @@ public abstract class AbstractStorageTest {
         storage.update(newResume);
         Assertions.assertAll(
                 () -> assertSize(3),
-                () -> Assertions.assertSame(newResume, storage.get(newResume.getUuid())),
+                () -> Assertions.assertEquals(newResume, storage.get(newResume.getUuid())),
                 () -> Assertions.assertThrows(NotFoundStorageException.class, () -> storage.update(ResumeTestData.createTestResume(DUMMY, DUMMY))));
     }
 

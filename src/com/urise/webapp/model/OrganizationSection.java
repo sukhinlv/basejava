@@ -1,11 +1,14 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
 import java.util.HashSet;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
 public class OrganizationSection extends AbstractSection {
+    @Serial
+    private static final long serialVersionUID = -9064212700326464060L;
     private HashSet<Organization> data;
 
     public OrganizationSection(HashSet<Organization> data) {

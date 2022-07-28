@@ -1,11 +1,15 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 
-public class Resume implements Comparable<Resume> {
+public class Resume implements Comparable<Resume>, Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1919842806405440174L;
     // Unique identifier
     private final String uuid;
     private String fullName;

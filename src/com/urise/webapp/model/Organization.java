@@ -1,12 +1,16 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public class Organization {
+public class Organization implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1884140744856283600L;
     private String title;
     private String website;
     private ArrayList<Period> periods;
@@ -63,7 +67,9 @@ public class Organization {
                 '}';
     }
 
-    public static class Period {
+    public static class Period implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -8776575920028854076L;
         private String title;
         private String desc;
         private LocalDate startDate;
@@ -73,7 +79,8 @@ public class Organization {
             this.title = requireNonNull(title, "Title must not be null");
             this.desc = desc;
             this.startDate = requireNonNull(startDate, "Start date must not be null");
-            this.endDate = requireNonNull(endDate, "End date must not be null");;
+            this.endDate = requireNonNull(endDate, "End date must not be null");
+            ;
         }
 
         public String getDesc() {
