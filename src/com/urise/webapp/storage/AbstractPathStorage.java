@@ -13,9 +13,9 @@ import java.util.Objects;
 public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     private final Path directory;
 
-    protected abstract Resume doRead(InputStream file) throws IOException;
+    protected abstract Resume doRead(InputStream inputStream) throws IOException;
 
-    protected abstract void doWrite(Resume r, OutputStream file) throws IOException;
+    protected abstract void doWrite(Resume r, OutputStream outputStream) throws IOException;
 
     protected AbstractPathStorage(Path directory) {
         Objects.requireNonNull(directory, "Directory must not be null");
@@ -49,7 +49,6 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected void doSave(Resume r, Path file) {
         try {
-            //noinspection ResultOfMethodCallIgnored
             Files.createFile(file);
             doWrite(r, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
@@ -104,5 +103,9 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
             throw new StorageException("IO error occurs when trying to determine storage size",
                     directory.getFileName().toString(), e);
         }
+    }
+
+    public Path getDirectory() {
+        return directory;
     }
 }

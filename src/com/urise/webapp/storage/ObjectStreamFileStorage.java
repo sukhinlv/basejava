@@ -4,15 +4,14 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.io.*;
-import java.nio.file.Path;
 
-public class ObjectStreamPathStorage extends AbstractPathStorage implements FileReadWriteStrategy {
-    protected ObjectStreamPathStorage(Path directory) {
+public class ObjectStreamFileStorage extends AbstractFileStorage {
+    protected ObjectStreamFileStorage(File directory) {
         super(directory);
     }
 
     @Override
-    public Resume doRead(InputStream inputStream) throws IOException {
+    protected Resume doRead(InputStream inputStream) throws IOException {
         try (var oos = new ObjectInputStream(inputStream)) {
             return (Resume) oos.readObject();
         } catch (ClassNotFoundException e) {
@@ -21,7 +20,7 @@ public class ObjectStreamPathStorage extends AbstractPathStorage implements File
     }
 
     @Override
-    public void doWrite(Resume r, OutputStream outputStream) throws IOException {
+    protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
         try (var oos = new ObjectOutputStream(outputStream)) {
             oos.writeObject(r);
         }

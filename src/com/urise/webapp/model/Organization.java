@@ -80,7 +80,6 @@ public class Organization implements Serializable {
             this.desc = desc;
             this.startDate = requireNonNull(startDate, "Start date must not be null");
             this.endDate = requireNonNull(endDate, "End date must not be null");
-            ;
         }
 
         public String getDesc() {

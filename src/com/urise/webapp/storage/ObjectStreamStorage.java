@@ -1,28 +1,30 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.util.Objects;
 
-public class ObjectStreamStorage extends AbstractFileStorage{
-    protected ObjectStreamStorage(File directory) {
+public class ObjectStreamStorage extends AbstractPathStorage {
+    private final FileReadWriteStrategy readWriteStrategyStorage;
+
+    protected ObjectStreamStorage(Path directory, FileReadWriteStrategy readWriteStrategyStorage) {
         super(directory);
+        this.readWriteStrategyStorage = Objects.requireNonNull(readWriteStrategyStorage, "Read/write " +
+                "strategy class must not be null");
     }
+
 
     @Override
     protected Resume doRead(InputStream inputStream) throws IOException {
-        try (var oos = new ObjectInputStream(inputStream)) {
-            return (Resume) oos.readObject();
-        } catch (ClassNotFoundException e) {
-            throw new StorageException("Wrong file format (ClassNotFoundException)", null, e);
-        }
+        return readWriteStrategyStorage.doRead(inputStream);
     }
 
     @Override
     protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
-        try (var oos = new ObjectOutputStream(outputStream)) {
-            oos.writeObject(r);
-        }
+        readWriteStrategyStorage.doWrite(r, outputStream);
     }
 }
