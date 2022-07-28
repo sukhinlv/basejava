@@ -1,6 +1,7 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.model.*;
+import com.urise.webapp.util.DateUtil;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -141,16 +142,16 @@ public class ResumeTestData {
 
         // EXPERIENCE
         var organizationData = new HashSet<Organization>();
-        var periods = new ArrayList<Period>();
-        periods.add(new Period("Автор проекта.",
+        var periods = new ArrayList<Organization.Period>();
+        periods.add(new Organization.Period("Автор проекта.",
                 "Создание, организация и проведение Java онлайн проектов и стажировок.",
                 LocalDate.of(2013, 10, 1),
-                null));
+                DateUtil.NOW));
         var organization = new Organization("Java Online Projects", "http://javaops.ru/", periods);
         organizationData.add(organization);
 
         periods = new ArrayList<>();
-        periods.add(new Period("Старший разработчик (backend)",
+        periods.add(new Organization.Period("Старший разработчик (backend)",
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, " +
                         "Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, " +
                         "авторизация по OAuth1, OAuth2, JWT SSO.",
@@ -163,30 +164,18 @@ public class ResumeTestData {
         // EDUCATION
         organizationData = new HashSet<>();
         periods = new ArrayList<>();
-        periods.add(new Period("'Functional Programming Principles in Scala' by Martin Odersky",
+        periods.add(new Organization.Period("'Functional Programming Principles in Scala' by Martin Odersky",
                 "",
                 LocalDate.of(2013, 3, 1),
                 LocalDate.of(2013, 5, 1)));
         organization = new Organization("Coursera", "https://www.coursera.org/course/progfun", periods);
         organizationData.add(organization);
-/*
-
-        organizationData = new HashSet<>();
         periods = new ArrayList<>();
-        periods.add(new Period("-",
-                "",
-                LocalDate.of(2013, 3, 1),
-                LocalDate.of(2013, 5, 1)));
-        organization = new Organization("Coursera", "https://www.coursera.org/course/progfun", periods);
-        organizationData.add(organization);
-
-*/
-        periods = new ArrayList<>();
-        periods.add(new Period("Аспирантура (программист С, С++)",
+        periods.add(new Organization.Period("Аспирантура (программист С, С++)",
                 "",
                 LocalDate.of(1993, 9, 1),
                 LocalDate.of(1996, 7, 1)));
-        periods.add(new Period("Инженер (программист Fortran, C)",
+        periods.add(new Organization.Period("Инженер (программист Fortran, C)",
                 "",
                 LocalDate.of(1987, 9, 1),
                 LocalDate.of(1993, 7, 1)));
