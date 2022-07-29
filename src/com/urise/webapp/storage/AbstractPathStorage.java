@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     private final Path directory;
@@ -50,10 +51,10 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     protected void doSave(Resume r, Path file) {
         try {
             Files.createFile(file);
-            doWrite(r, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("Error writing to file ", file.getFileName().toString(), e);
+            throw new StorageException("Error creating file ", file.getFileName().toString(), e);
         }
+        doUpdate(r, file);
     }
 
     @Override
@@ -67,17 +68,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Path getSearchKey(String uuid) {
-        return Path.of(directory.toString(), uuid);
-    }
-
-    @Override
-    protected List<Resume> getStorageAsList() {
-        try (var listOfStorageFiles =  Files.list(directory)){
-            return new ArrayList<>(listOfStorageFiles.map(this::doGet).toList());
-        } catch (IOException e) {
-            throw new StorageException("I/O error occurs when opening the storage directory",
-                    directory.getFileName().toString(), e);
-        }
+        return directory.resolve(uuid);
     }
 
     @Override
@@ -86,26 +77,26 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     }
 
     @Override
+    protected List<Resume> getStorageAsList() {
+        return new ArrayList<>(getListOfFilesInStorage().map(this::doGet).toList());
+    }
+
+    @Override
     public void clear() {
-        try (var listOfStorageFiles =  Files.list(directory)){
-            listOfStorageFiles.forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("I/O error occurs when opening the storage directory",
-                    directory.getFileName().toString(), e);
-        }
+        getListOfFilesInStorage().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
-        try (var listOfStorageFiles =  Files.list(directory)){
-            return (int) listOfStorageFiles.count();
-        } catch (IOException e) {
-            throw new StorageException("IO error occurs when trying to determine storage size",
-                    directory.getFileName().toString(), e);
-        }
+        return (int) getListOfFilesInStorage().count();
     }
 
-    public Path getDirectory() {
-        return directory;
+    private Stream<Path> getListOfFilesInStorage() {
+        try {
+            return  Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("I/O error occurs when opening the storage directory",
+                    directory.getFileName().toString(), e);
+        }
     }
 }

@@ -5,8 +5,10 @@ import com.urise.webapp.model.Resume;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private final File directory;
@@ -47,10 +49,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             //noinspection ResultOfMethodCallIgnored
             file.createNewFile();
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("Error writing to file ", file.getName(), e);
+            throw new StorageException("Error creating file ", file.getName(), e);
         }
+        doUpdate(r, file);
     }
 
     @Override
@@ -68,43 +70,30 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected List<Resume> getStorageAsList() {
-        var result = new ArrayList<Resume>();
-        var fileList = directory.listFiles(File::isFile);
-        if (fileList == null) {
-            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs", "");
-        }
-        for (var file : fileList) {
-            result.add(doGet(file));
-        }
-        return result;
-    }
-
-    @Override
     protected boolean isExist(File file) {
         return file.exists();
     }
 
     @Override
+    protected List<Resume> getStorageAsList() {
+        return new ArrayList<>(getListOfFilesInStorage().map(this::doGet).toList());
+    }
+
+    @Override
     public void clear() {
-        var fileList = directory.listFiles(File::isFile);
-        if (fileList == null) {
-            throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs", "");
-        }
-        for (var file : fileList) {
-            if (!file.delete()) {
-                throw new StorageException("Can not delete file", file.getName());
-            }
-        }
+        getListOfFilesInStorage().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
+        return (int) getListOfFilesInStorage().count();
+    }
+
+    private Stream<File> getListOfFilesInStorage() {
         var files = directory.listFiles(File::isFile);
         if (files == null) {
             throw new StorageException(directory.getAbsolutePath() + " does not denote a directory, or an I/O error occurs", "");
-        } else {
-            return files.length;
         }
+        return Arrays.stream(files);
     }
 }

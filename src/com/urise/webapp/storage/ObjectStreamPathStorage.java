@@ -16,7 +16,7 @@ public class ObjectStreamPathStorage extends AbstractPathStorage implements File
         try (var oos = new ObjectInputStream(inputStream)) {
             return (Resume) oos.readObject();
         } catch (ClassNotFoundException e) {
-            throw new StorageException("Wrong file format (ClassNotFoundException)", null, e);
+            throw new StorageException("Wrong file format (ClassNotFoundException)", "", e);
         }
     }
 
