@@ -4,12 +4,8 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.io.*;
-import java.nio.file.Path;
 
-public class ObjectStreamPathStorage extends AbstractPathStorage implements FileReadWriteStrategy {
-    protected ObjectStreamPathStorage(Path directory) {
-        super(directory);
-    }
+public class ObjectStreamPathStorage implements FileReadWriteStrategy {
 
     @Override
     public Resume doRead(InputStream inputStream) throws IOException {
