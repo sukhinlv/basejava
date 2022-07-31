@@ -1,17 +1,14 @@
-package com.urise.webapp.storage;
+package com.urise.webapp.storage.serializer;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamFileStorage extends AbstractFileStorage {
-    protected ObjectStreamFileStorage(File directory) {
-        super(directory);
-    }
+public class ObjectStreamSerializer implements StreamSerializer {
 
     @Override
-    protected Resume doRead(InputStream inputStream) throws IOException {
+    public Resume doRead(InputStream inputStream) throws IOException {
         try (var oos = new ObjectInputStream(inputStream)) {
             return (Resume) oos.readObject();
         } catch (ClassNotFoundException e) {
@@ -20,7 +17,7 @@ public class ObjectStreamFileStorage extends AbstractFileStorage {
     }
 
     @Override
-    protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
+    public void doWrite(Resume r, OutputStream outputStream) throws IOException {
         try (var oos = new ObjectOutputStream(outputStream)) {
             oos.writeObject(r);
         }
