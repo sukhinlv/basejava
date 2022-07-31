@@ -15,8 +15,8 @@ public class FileStorage extends AbstractStorage<File> {
     private final File directory;
     private final StreamSerializer streamSerializer;
 
-    protected FileStorage(File directory, StreamSerializer readWriteStrategyStorage) {
-        this.streamSerializer = Objects.requireNonNull(readWriteStrategyStorage, "Read/write " +
+    protected FileStorage(File directory, StreamSerializer streamSerializer) {
+        this.streamSerializer = Objects.requireNonNull(streamSerializer, "Read/write " +
                 "strategy class must not be null");
         Objects.requireNonNull(directory, "Directory must not be null");
         if (!directory.isDirectory()) {

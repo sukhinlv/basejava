@@ -19,8 +19,8 @@ public class PathStorage extends AbstractStorage<Path> {
 
     private final StreamSerializer streamSerializer;
 
-    protected PathStorage(Path directory, StreamSerializer readWriteStrategyStorage) {
-        this.streamSerializer = Objects.requireNonNull(readWriteStrategyStorage, "Read/write " +
+    protected PathStorage(Path directory, StreamSerializer streamSerializer) {
+        this.streamSerializer = Objects.requireNonNull(streamSerializer, "Read/write " +
                 "strategy class must not be null");
         Objects.requireNonNull(directory, "Directory must not be null");
         if (!Files.isDirectory(directory)) {
